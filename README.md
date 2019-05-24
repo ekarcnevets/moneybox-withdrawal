@@ -24,3 +24,26 @@ As part of this process however, you should look to refactor some of the code in
 Once you have completed your work, send us a link to your public repository.
 
 Good luck!
+
+## Notes on changes made
+### Account.cs
+- Introduced constants for the thresholds to improve clarity of intent
+- Made property setters private for security purposes preventing external changes. To change these we should be using methods on the model
+- Added constructor to ensure that Accounts are complete on construction i.e. you can't only assign the Id and not the User
+- Moved shared behaviour from TransferMoney and WithdrawMoney into this model (PayIn, Withdraw methods), taking the notification service as a parameter rather than a constructor injected property to keep the service layer out of the domain
+- Added positive value check on amounts being paid in and withdrawn as negatives and zeroes don't make sense - zeroes would be okay except they might result in notifications even though the balance didn't change
+
+### User.cs
+- Made property setters private for security purposes preventing external changes. To change these we should be using methods on the model
+- Added constructor to ensure that Users are complete on construction i.e. you can't only assign the Id and not the Name/Email
+
+### TransferMoney.cs
+- Added a check to prevent transfering money from and to the same account since it doesn't make sense
+
+### TransferMoney.cs & WithdrawMoney.cs
+- Made the IAccountRepository and the INotificationService readonly to prevent bugs from them being reassigned
+
+### Possible improvements
+- The transfer operation in TransferMoney() should be atomic i.e. transacted - this is especially important given we are transfering money. However it would need some refactoring to ensure the notifications are only sent out if both succeed.
+- I don't like how the TestAccountFactory behaves - given time I would change it so that it keeps track of created accounts, and returns the same instance if it is requested again. This would also allow asserting directly against the model properties in tests, meaning I wouldn't need the UpdatedAccounts property in BaseFeatureTest.
+
