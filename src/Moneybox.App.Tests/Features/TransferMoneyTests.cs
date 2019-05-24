@@ -9,13 +9,13 @@ namespace Moneybox.App.Tests.Features
 {
     public class TransferMoneyTests : BaseFeatureTest
     {
-        private TransferMoney _transferMoney;
+        private TransferMoney transferMoney;
 
         public override void SetUp()
         {
             base.SetUp();
 
-            _transferMoney = new TransferMoney(AccountRepositoryMock.Object, NotificationServiceMock.Object);
+            transferMoney = new TransferMoney(AccountRepositoryMock.Object, NotificationServiceMock.Object);
         }
 
         [Test]
@@ -23,7 +23,7 @@ namespace Moneybox.App.Tests.Features
         {
             var amount = TestAccountFactory.DefaultBalance + 1m;
 
-            Action transferAction = () => _transferMoney.Execute(
+            Action transferAction = () => transferMoney.Execute(
                 TestAccountFactory.Ids.DefaultFrom,
                 TestAccountFactory.Ids.DefaultTo,
                 amount);
@@ -43,7 +43,7 @@ namespace Moneybox.App.Tests.Features
         {
             var amount = 1m;
 
-            Action transferAction = () => _transferMoney.Execute(
+            Action transferAction = () => transferMoney.Execute(
                 TestAccountFactory.Ids.DefaultFrom,
                 TestAccountFactory.Ids.AtPayInLimit,
                 amount);
@@ -63,7 +63,7 @@ namespace Moneybox.App.Tests.Features
         {
             var amount = 1m;
 
-            _transferMoney.Execute(
+            transferMoney.Execute(
                 TestAccountFactory.Ids.FundsLow,
                 TestAccountFactory.Ids.DefaultTo,
                 amount);
@@ -81,7 +81,7 @@ namespace Moneybox.App.Tests.Features
         {
             var amount = 1m;
 
-            _transferMoney.Execute(
+            transferMoney.Execute(
                 TestAccountFactory.Ids.DefaultFrom,
                 TestAccountFactory.Ids.ApproachingPayInLimit,
                 amount);
@@ -97,7 +97,7 @@ namespace Moneybox.App.Tests.Features
         [Test]
         public void SuccessfulTransferUpdatesFromAndToAccounts([Values(1, 2000, 4000)] decimal amount)
         {
-            _transferMoney.Execute(
+            transferMoney.Execute(
                 TestAccountFactory.Ids.DefaultFrom,
                 TestAccountFactory.Ids.DefaultTo,
                 amount);

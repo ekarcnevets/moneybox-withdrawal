@@ -10,14 +10,14 @@ namespace Moneybox.App.Tests.Features
     [TestFixture]
     public class WithdrawMoneyTests : BaseFeatureTest
     {
-        private WithdrawMoney _withdrawMoney;
+        private WithdrawMoney withdrawMoney;
 
         
         public override void SetUp()
         {
             base.SetUp();
 
-            _withdrawMoney = new WithdrawMoney(AccountRepositoryMock.Object, NotificationServiceMock.Object);
+            withdrawMoney = new WithdrawMoney(AccountRepositoryMock.Object, NotificationServiceMock.Object);
         }
 
         [Test]
@@ -25,7 +25,7 @@ namespace Moneybox.App.Tests.Features
         {
             var amount = TestAccountFactory.DefaultBalance + 1m;
 
-            Action withdrawalAction = () => _withdrawMoney.Execute(
+            Action withdrawalAction = () => withdrawMoney.Execute(
                 TestAccountFactory.Ids.DefaultFrom,
                 amount);
 
@@ -44,7 +44,7 @@ namespace Moneybox.App.Tests.Features
         {
             var amount = 1m;
 
-            _withdrawMoney.Execute(
+            withdrawMoney.Execute(
                 TestAccountFactory.Ids.FundsLow,
                 amount);
 
@@ -59,7 +59,7 @@ namespace Moneybox.App.Tests.Features
         [Test]
         public void SuccessfulWithdrawUpdatesFromAccount([Values(1, 2000, 4000)] decimal amount)
         {
-            _withdrawMoney.Execute(
+            withdrawMoney.Execute(
                 TestAccountFactory.Ids.DefaultFrom,
                 amount);
 
