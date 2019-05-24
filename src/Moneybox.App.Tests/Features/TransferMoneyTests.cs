@@ -2,11 +2,8 @@ using System;
 using NUnit.Framework;
 using Moq;
 using FluentAssertions;
-using Moneybox.App.DataAccess;
-using Moneybox.App.Domain.Services;
 using Moneybox.App.Features;
 using Moneybox.App.Tests.DomainFactories;
-using System.Collections.Generic;
 
 namespace Moneybox.App.Tests.Features
 {

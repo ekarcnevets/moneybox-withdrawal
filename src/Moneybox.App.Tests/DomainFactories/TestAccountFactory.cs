@@ -24,10 +24,6 @@ namespace Moneybox.App.Tests.DomainFactories
         public const decimal DefaultPaidIn = 0m;
         public const decimal DefaultWithdrawn = 0m;
 
-        // These thresholds from TransferMoney Execute method
-        public const decimal FundsLowBalance = 500m;
-        public const decimal ApproachingPayInLimitThresholdFrom = 500m;
-
         private static Account CreateAccount(Guid id, string userName, decimal balance = DefaultBalance, decimal paidIn = DefaultPaidIn)
         {
             var user = new User
@@ -59,12 +55,12 @@ namespace Moneybox.App.Tests.DomainFactories
 
         public static Account NewFundsLow()
         {
-            return CreateAccount(Ids.FundsLow, nameof(Ids.FundsLow), balance: FundsLowBalance);
+            return CreateAccount(Ids.FundsLow, nameof(Ids.FundsLow), balance: Account.FundsLowThreshold);
         }
 
         public static Account NewApproachingPayInLimit()
         {
-            return CreateAccount(Ids.ApproachingPayInLimit, nameof(Ids.ApproachingPayInLimit), paidIn: Account.PayInLimit - ApproachingPayInLimitThresholdFrom);
+            return CreateAccount(Ids.ApproachingPayInLimit, nameof(Ids.ApproachingPayInLimit), paidIn: Account.PayInLimit - Account.ApproachingPayInLimitThreshold);
         }
 
         public static Account NewAtPayInLimit()
