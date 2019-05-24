@@ -40,6 +40,23 @@ namespace Moneybox.App.Tests.Features
         }
 
         [Test]
+        public void ExceptionThrownOnNonPositiveAmount([Values(-1, 0)] decimal amount)
+        {
+            Action transferAction = () => withdrawMoney.Execute(
+                TestAccountFactory.Ids.DefaultFrom,
+                amount);
+
+            transferAction.Should().Throw<InvalidOperationException>();
+
+            // Ensure that no notifications were sent
+            NotificationServiceMock.Verify(x => x.NotifyApproachingPayInLimit(It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.NotifyFundsLow(It.IsAny<string>()), Times.Never);
+
+            // Ensure that the account was not updated
+            AccountRepositoryMock.Verify(x => x.Update(It.IsAny<Account>()), Times.Never);
+        }
+
+        [Test]
         public void UserNotifiedOnFundsLow()
         {
             var amount = 1m;

@@ -9,18 +9,32 @@ namespace Moneybox.App
         public const decimal FundsLowThreshold = 500m;
         public const decimal ApproachingPayInLimitThreshold = 500m;
 
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; }
 
-        public User User { get; set; }
+        public User User { get; private set; }
 
-        public decimal Balance { get; set; }
+        public decimal Balance { get; private set; }
 
-        public decimal Withdrawn { get; set; }
+        public decimal Withdrawn { get; private set; }
 
-        public decimal PaidIn { get; set; }
+        public decimal PaidIn { get; private set; }
+
+        public Account(Guid id, User user, decimal balance = 0m, decimal paidIn = 0m, decimal withdrawn = 0m)
+        {
+            Id = id;
+            User = user;
+            Balance = balance;
+            PaidIn = paidIn;
+            Withdrawn = withdrawn;
+        }
 
         public void PayIn(decimal amount, INotificationService notificationService)
         {
+            if (amount <= 0m)
+            {
+                throw new InvalidOperationException("Pay In amount must be positive and non-zero");
+            }
+
             var newPaidIn = PaidIn + amount;
             if (newPaidIn > PayInLimit)
             {
@@ -38,6 +52,11 @@ namespace Moneybox.App
 
         public void Withdraw(decimal amount, INotificationService notificationService)
         {
+            if (amount <= 0m)
+            {
+                throw new InvalidOperationException("Withdraw amount must be positive and non-zero");
+            }
+
             var newBalance = Balance - amount;
             if (newBalance < 0m)
             {

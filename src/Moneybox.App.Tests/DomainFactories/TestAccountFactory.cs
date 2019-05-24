@@ -2,7 +2,6 @@
 
 namespace Moneybox.App.Tests.DomainFactories
 {
-    // TODO: Cache?
     /// <summary>
     /// Factory class for creating Accounts with helpful state for testing against.
     /// </summary>
@@ -24,23 +23,11 @@ namespace Moneybox.App.Tests.DomainFactories
         public const decimal DefaultPaidIn = 0m;
         public const decimal DefaultWithdrawn = 0m;
 
-        private static Account CreateAccount(Guid id, string userName, decimal balance = DefaultBalance, decimal paidIn = DefaultPaidIn)
+        private static Account CreateAccount(Guid id, string userName, decimal balance = DefaultBalance, decimal paidIn = DefaultPaidIn, decimal withdrawn = DefaultWithdrawn)
         {
-            var user = new User
-            {
-                Id = Guid.NewGuid(),
-                Name = userName,
-                Email = $"{userName}@email.com",
-            };
+            var user = new User(Guid.NewGuid(), userName, $"{userName}@email.com");
 
-            return new Account
-            {
-                Id = id,
-                User = user,
-                Balance = balance,
-                Withdrawn = DefaultWithdrawn,
-                PaidIn = paidIn,
-            };
+            return new Account(id, user, balance, paidIn, withdrawn);
         }
 
         public static Account NewDefaultFrom()

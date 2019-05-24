@@ -6,8 +6,8 @@ namespace Moneybox.App.Features
 {
     public class TransferMoney
     {
-        private IAccountRepository accountRepository;
-        private INotificationService notificationService;
+        private readonly IAccountRepository accountRepository;
+        private readonly INotificationService notificationService;
 
         public TransferMoney(IAccountRepository accountRepository, INotificationService notificationService)
         {
@@ -17,6 +17,11 @@ namespace Moneybox.App.Features
 
         public void Execute(Guid fromAccountId, Guid toAccountId, decimal amount)
         {
+            if (fromAccountId.Equals(toAccountId))
+            {
+                throw new InvalidOperationException("Cannot transfer from and to the same account");
+            }
+
             var from = this.accountRepository.GetAccountById(fromAccountId);
             var to = this.accountRepository.GetAccountById(toAccountId);
 

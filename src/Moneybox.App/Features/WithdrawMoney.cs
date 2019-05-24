@@ -6,8 +6,8 @@ namespace Moneybox.App.Features
 {
     public class WithdrawMoney
     {
-        private IAccountRepository accountRepository;
-        private INotificationService notificationService;
+        private readonly IAccountRepository accountRepository;
+        private readonly INotificationService notificationService;
 
         public WithdrawMoney(IAccountRepository accountRepository, INotificationService notificationService)
         {

@@ -59,6 +59,44 @@ namespace Moneybox.App.Tests.Features
         }
 
         [Test]
+        public void ExceptionThrownOnNonPositiveAmount([Values(-1, 0)] decimal amount)
+        {
+            Action transferAction = () => transferMoney.Execute(
+                TestAccountFactory.Ids.DefaultFrom,
+                TestAccountFactory.Ids.DefaultTo,
+                amount);
+
+            transferAction.Should().Throw<InvalidOperationException>();
+
+            // Ensure that no notifications were sent
+            NotificationServiceMock.Verify(x => x.NotifyApproachingPayInLimit(It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.NotifyFundsLow(It.IsAny<string>()), Times.Never);
+
+            // Ensure that neither account was updated
+            AccountRepositoryMock.Verify(x => x.Update(It.IsAny<Account>()), Times.Never);
+        }
+
+        [Test]
+        public void ExceptionThrownOnFromToSameAccount()
+        {
+            var amount = 1m;
+
+            Action transferAction = () => transferMoney.Execute(
+                TestAccountFactory.Ids.DefaultFrom,
+                TestAccountFactory.Ids.DefaultFrom,
+                amount);
+
+            transferAction.Should().Throw<InvalidOperationException>();
+
+            // Ensure that no notifications were sent
+            NotificationServiceMock.Verify(x => x.NotifyApproachingPayInLimit(It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.NotifyFundsLow(It.IsAny<string>()), Times.Never);
+
+            // Ensure that neither account was updated
+            AccountRepositoryMock.Verify(x => x.Update(It.IsAny<Account>()), Times.Never);
+        }
+
+        [Test]
         public void FromUserNotifiedOnFundsLow()
         {
             var amount = 1m;
