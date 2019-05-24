@@ -22,6 +22,8 @@ namespace Moneybox.App.Tests.DomainFactories
 
         public const decimal DefaultBalance = 10000m;
         public const decimal DefaultPaidIn = 0m;
+        public const decimal DefaultWithdrawn = 0m;
+
         // These thresholds from TransferMoney Execute method
         public const decimal FundsLowBalance = 500m;
         public const decimal ApproachingPayInLimitThresholdFrom = 500m;
@@ -40,7 +42,7 @@ namespace Moneybox.App.Tests.DomainFactories
                 Id = id,
                 User = user,
                 Balance = balance,
-                Withdrawn = 0m,
+                Withdrawn = DefaultWithdrawn,
                 PaidIn = paidIn,
             };
         }
