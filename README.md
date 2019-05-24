@@ -47,3 +47,9 @@ Good luck!
 - The transfer operation in TransferMoney() should be atomic i.e. transacted - this is especially important given we are transfering money. However it would need some refactoring to ensure the notifications are only sent out if both succeed.
 - I don't like how the TestAccountFactory behaves - given time I would change it so that it keeps track of created accounts, and returns the same instance if it is requested again. This would also allow asserting directly against the model properties in tests, meaning I wouldn't need the UpdatedAccounts property in BaseFeatureTest.
 
+## Testing libraries
+I have used the following libraries from NuGet to help me test
+- NUnit 3.10.1 as the testing framework
+- Moq 4.10.1 as the mocking framework
+- FluentAssertions 5.6.0 for making natural language assertions
+
